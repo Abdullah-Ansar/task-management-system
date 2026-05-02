@@ -1,5 +1,6 @@
 package com.example.taskmanager.entity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "tasks")
@@ -9,21 +10,22 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @NotBlank(message = "Title is required")
     private String title;
 
-    @Column(length = 1000)
+    @Size(max = 1000, message = "Description too long")
     private String description;
 
     private boolean completed;
 
-    @Column(nullable = false)
-    private String status;
+    @NotNull(message = "Status is required")
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     // Constructors
     public Task() {}
 
-    public Task(String title, String description, boolean completed, String status) {
+    public Task(String title, String description, boolean completed, Status status) {
         this.title = title;
         this.description = description;
         this.completed = completed;
@@ -59,11 +61,11 @@ public class Task {
         this.completed = completed;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 }
