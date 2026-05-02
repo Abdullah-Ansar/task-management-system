@@ -1,8 +1,11 @@
 package com.example.taskmanager.controller;
 
+import com.example.taskmanager.dto.TaskRequestDTO;
+import com.example.taskmanager.dto.TaskResponseDTO;
 import com.example.taskmanager.entity.Task;
 import com.example.taskmanager.service.TaskService;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -17,12 +20,12 @@ public class TaskController {
     }
 
     @PostMapping
-    public Task createTask(@RequestBody Task task) {
-        return service.createTask(task);
+    public TaskResponseDTO createTask(@Valid @RequestBody TaskRequestDTO dto) {
+        return service.createTask(dto);
     }
 
     @GetMapping
-    public List<Task> getAllTasks() {
+    public List<TaskResponseDTO> getAllTasks() {
         return service.getAllTasks();
     }
     @GetMapping("/{id}")
