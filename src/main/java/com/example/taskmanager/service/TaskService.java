@@ -7,6 +7,7 @@ import com.example.taskmanager.entity.Task;
 import com.example.taskmanager.exception.ResourceNotFoundException;
 import com.example.taskmanager.repository.TaskRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.*;
 
 import java.util.List;
 
@@ -25,28 +26,38 @@ public class TaskService {
         return mapToDTO(saved);
     }
 
-    public List<TaskResponseDTO> getAllTasks() {
-        return repository.findAll()
-                .stream()
-                .map(this::mapToDTO)
-                .toList();
+    public Page<TaskResponseDTO> getAllTasks(int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Task> taskPage = repository.findAll(pageable);
+
+        return taskPage.map(this::mapToDTO);
     }
 
-    public Task getTaskById(Long id) {
-        return repository.findById(id)
+    public TaskResponseDTO getTaskById(Long id) {
+        Task task = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
+
+        return mapToDTO(task);
     }
-    public Task updateTask(Long id, Task updatedTask) {
-        Task existing = getTaskById(id);
+    public TaskResponseDTO updateTask(Long id, TaskRequestDTO dto) {
+        Task existing = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
 
-        existing.setTitle(updatedTask.getTitle());
-        existing.setDescription(updatedTask.getDescription());
-        existing.setCompleted(updatedTask.isCompleted());
-        existing.setStatus(updatedTask.getStatus());
+        existing.setTitle(dto.getTitle());
+        existing.setDescription(dto.getDescription());
+        existing.setCompleted(dto.isCompleted());
+        existing.setStatus(Status.valueOf(dto.getStatus()));
 
-        return repository.save(existing);
+        Task updated = repository.save(existing);
+
+        return mapToDTO(updated);
     }
     public void deleteTask(Long id) {
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundException("Task not found with id: " + id);
+        }
         repository.deleteById(id);
     }
     private Task mapToEntity(TaskRequestDTO dto) {
