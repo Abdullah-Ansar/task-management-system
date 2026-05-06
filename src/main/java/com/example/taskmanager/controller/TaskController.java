@@ -4,6 +4,8 @@ import com.example.taskmanager.dto.TaskRequestDTO;
 import com.example.taskmanager.dto.TaskResponseDTO;
 import com.example.taskmanager.entity.Task;
 import com.example.taskmanager.service.TaskService;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
@@ -25,20 +27,26 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<TaskResponseDTO> getAllTasks() {
-        return service.getAllTasks();
+    public ResponseEntity<Page<TaskResponseDTO>> getAllTasks(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+
+        return ResponseEntity.ok(service.getAllTasks(page, size));
     }
     @GetMapping("/{id}")
-    public Task getTaskById(@PathVariable Long id) {
-        return service.getTaskById(id);
+    public ResponseEntity<TaskResponseDTO> getTaskById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getTaskById(id));
     }
     @PutMapping("/{id}")
-    public Task updateTask(@PathVariable Long id, @RequestBody Task task) {
-        return service.updateTask(id, task);
+    public ResponseEntity<TaskResponseDTO> updateTask(
+            @PathVariable Long id,
+            @Valid @RequestBody TaskRequestDTO dto) {
+
+        return ResponseEntity.ok(service.updateTask(id, dto));
     }
     @DeleteMapping("/{id}")
-    public String deleteTask(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         service.deleteTask(id);
-        return "Task deleted successfully";
+        return ResponseEntity.noContent().build();
     }
 }
