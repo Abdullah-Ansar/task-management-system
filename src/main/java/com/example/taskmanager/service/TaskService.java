@@ -26,13 +26,19 @@ public class TaskService {
         return mapToDTO(saved);
     }
 
-    public Page<TaskResponseDTO> getAllTasks(int page, int size) {
+    public Page<TaskResponseDTO> getAllTasks(
+            int page,
+            int size,
+            String sortBy) {
 
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by(sortBy)
+        );
 
-        Page<Task> taskPage = repository.findAll(pageable);
-
-        return taskPage.map(this::mapToDTO);
+        return repository.findAll(pageable)
+                .map(this::mapToDTO);
     }
 
     public TaskResponseDTO getTaskById(Long id) {

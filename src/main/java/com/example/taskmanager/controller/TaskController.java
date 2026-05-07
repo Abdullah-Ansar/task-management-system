@@ -28,10 +28,17 @@ public class TaskController {
 
     @GetMapping
     public ResponseEntity<Page<TaskResponseDTO>> getAllTasks(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
 
-        return ResponseEntity.ok(service.getAllTasks(page, size));
+            @RequestParam(defaultValue = "0") int page,
+
+            @RequestParam(defaultValue = "5") int size,
+
+            @RequestParam(defaultValue = "id") String sortBy
+    ) {
+
+        return ResponseEntity.ok(
+                service.getAllTasks(page, size, sortBy)
+        );
     }
     @GetMapping("/{id}")
     public ResponseEntity<TaskResponseDTO> getTaskById(@PathVariable Long id) {
