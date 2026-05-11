@@ -56,4 +56,20 @@ public class TaskController {
         service.deleteTask(id);
         return ResponseEntity.noContent().build();
     }
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<TaskResponseDTO>> getTasksByStatus(
+            @PathVariable String status) {
+
+        return ResponseEntity.ok(
+                service.getTasksByStatus(status)
+        );
+    }
+    @GetMapping("/search")
+    public ResponseEntity<List<TaskResponseDTO>> searchTasks(
+            @RequestParam String keyword) {
+
+        return ResponseEntity.ok(
+                service.searchTasks(keyword)
+        );
+    }
 }

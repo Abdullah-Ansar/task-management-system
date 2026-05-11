@@ -85,4 +85,21 @@ public class TaskService {
 
         return dto;
     }
+    public List<TaskResponseDTO> getTasksByStatus(String status) {
+
+        Status taskStatus = Status.valueOf(status);
+
+        return repository.findByStatus(taskStatus)
+                .stream()
+                .map(this::mapToDTO)
+                .toList();
+    }
+    public List<TaskResponseDTO> searchTasks(String keyword) {
+
+        return repository
+                .findByTitleContainingIgnoreCase(keyword)
+                .stream()
+                .map(this::mapToDTO)
+                .toList();
+    }
 }
