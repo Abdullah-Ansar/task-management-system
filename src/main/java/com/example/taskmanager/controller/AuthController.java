@@ -1,5 +1,7 @@
 package com.example.taskmanager.controller;
 
+import com.example.taskmanager.dto.LoginRequestDTO;
+import com.example.taskmanager.dto.LoginResponseDTO;
 import com.example.taskmanager.dto.RegisterRequestDTO;
 import com.example.taskmanager.dto.UserResponseDTO;
 import com.example.taskmanager.service.UserService;
@@ -22,6 +24,14 @@ public class AuthController {
 
         return ResponseEntity.ok(
                 service.register(dto)
+        );
+    }
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> login(
+            @RequestBody LoginRequestDTO dto) {
+
+        return ResponseEntity.ok(
+                service.login(dto)
         );
     }
 }
