@@ -1,19 +1,32 @@
 # Task Management and Team Collaboration System
 
-A backend REST API project built using Java, Spring Boot, Gradle, and MySQL.
+A backend REST API project built using Java, Spring Boot, Gradle, MySQL, and Spring Security.
 
-This project allows users to create, update, manage, and organize tasks efficiently using clean layered architecture and industry-level backend practices.
+This project provides a complete task management backend system with authentication, JWT-based authorization, pagination, validation, filtering, and clean layered architecture following industry-level backend development practices.
 
 ---
 
 ## 🚀 Features
 
+### 🔐 Authentication & Security
+- User Registration
+- User Login
+- JWT Token Generation
+- Password Encryption using BCrypt
+- Spring Security Integration
+
+### 📋 Task Management
 - Create Task
 - Get All Tasks
 - Get Task By ID
 - Update Task
 - Delete Task
-- Pagination Support
+
+### ⚡ Advanced Backend Features
+- Pagination
+- Sorting
+- Search APIs
+- Filter Tasks by Status
 - Validation Handling
 - Global Exception Handling
 - DTO Architecture
@@ -24,10 +37,13 @@ This project allows users to create, update, manage, and organize tasks efficien
 ## 🛠️ Tech Stack
 
 - Java 21
-- Spring Boot
+- Spring Boot 3
+- Spring Security
+- JWT Authentication
 - Spring Data JPA
 - MySQL
 - Gradle
+- Hibernate
 - Postman
 - Git & GitHub
 
@@ -44,11 +60,22 @@ src/main/java/com/example/taskmanager
 ├── entity
 ├── dto
 ├── exception
+├── config
+├── security
 ```
 
 ---
 
-## 🔥 API Endpoints
+## 🔥 Authentication APIs
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | /api/auth/register | Register new user |
+| POST | /api/auth/login | Login user |
+
+---
+
+## 📋 Task APIs
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
@@ -60,19 +87,39 @@ src/main/java/com/example/taskmanager
 
 ---
 
-## 📄 Pagination Example
+## 🔍 Filtering & Search APIs
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /api/tasks/status/{status} | Filter tasks by status |
+| GET | /api/tasks/search?keyword=spring | Search tasks by title |
+
+---
+
+## 📄 Pagination & Sorting Example
 
 ```http
-GET /api/tasks?page=0&size=5
+GET /api/tasks?page=0&size=5&sortBy=title
 ```
 
 ---
 
-## ⚠️ Validation Example
+## 🔐 JWT Login Example
+
+### Request
 
 ```json
 {
-  "title": "Title is required"
+  "email": "abdullah@gmail.com",
+  "password": "123456"
+}
+```
+
+### Response
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiJ9..."
 }
 ```
 
@@ -90,12 +137,16 @@ DONE
 
 ## 🧠 Concepts Implemented
 
+- REST APIs
 - Layered Architecture
 - DTO Pattern
 - Validation
 - Exception Handling
-- Pagination
-- REST APIs
+- Pagination & Sorting
+- Search & Filtering
+- Spring Security
+- JWT Authentication
+- Password Encryption
 - ResponseEntity
 - Enum Usage
 
@@ -108,6 +159,8 @@ DONE
 ```bash
 git clone https://github.com/Abdullah-Ansar/task-management-system.git
 ```
+
+---
 
 ### Configure Database
 
@@ -127,7 +180,7 @@ spring.datasource.password=YOUR_PASSWORD
 
 ---
 
-## ▶️ Start Application
+### Start Application
 
 ```bash
 ./gradlew bootRun
