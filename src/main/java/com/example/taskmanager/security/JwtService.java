@@ -29,4 +29,31 @@ public class JwtService {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
+    public boolean validateToken(String token, String email) {
+
+        String extractedEmail = extractEmail(token);
+
+        return extractedEmail.equals(email)
+                && !isTokenExpired(token);
+    }
+    public String extractEmail(String token) {
+
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
+    private boolean isTokenExpired(String token) {
+
+        Date expiration = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getExpiration();
+
+        return expiration.before(new Date());
+    }
 }
