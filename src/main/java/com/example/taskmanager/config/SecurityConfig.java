@@ -42,8 +42,12 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest()
+
+                        .requestMatchers("/api/auth/**")
                         .permitAll()
+
+                        .anyRequest()
+                        .authenticated()
                 )
 
                 .addFilterBefore(
