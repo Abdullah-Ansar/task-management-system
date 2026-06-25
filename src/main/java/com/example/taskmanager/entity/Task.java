@@ -1,10 +1,18 @@
 package com.example.taskmanager.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+
+
 
 @Entity
 @Table(name = "tasks")
 public class Task {
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +29,18 @@ public class Task {
     @NotNull(message = "Status is required")
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     // Constructors
     public Task() {}

@@ -1,10 +1,17 @@
 package com.example.taskmanager.entity;
 
+import jakarta.persistence.OneToMany;
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
 public class User {
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Task> tasks;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

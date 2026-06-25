@@ -4,25 +4,50 @@ import com.example.taskmanager.dto.TaskRequestDTO;
 import com.example.taskmanager.dto.TaskResponseDTO;
 import com.example.taskmanager.entity.Status;
 import com.example.taskmanager.entity.Task;
+import com.example.taskmanager.entity.User;
 import com.example.taskmanager.exception.ResourceNotFoundException;
 import com.example.taskmanager.repository.TaskRepository;
+import com.example.taskmanager.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.*;
-
+import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.List;
 
 @Service
 public class TaskService {
 
     private final TaskRepository repository;
+    private final UserRepository userRepository;
 
-    public TaskService(TaskRepository repository) {
+    public TaskService(TaskRepository repository,
+                       UserRepository userRepository) {
+
         this.repository = repository;
+        this.userRepository = userRepository;
     }
 
     public TaskResponseDTO createTask(TaskRequestDTO dto) {
+
+        // Get logged-in user's email from JWT
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        // Find user in database
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        // Create task
         Task task = mapToEntity(dto);
+
+        // Assign task to current user
+        task.setUser(user);
+
+        // Save task
         Task saved = repository.save(task);
+
         return mapToDTO(saved);
     }
 
@@ -30,14 +55,20 @@ public class TaskService {
             int page,
             int size,
             String sortBy) {
-
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
         Pageable pageable = PageRequest.of(
                 page,
                 size,
                 Sort.by(sortBy)
         );
 
-        return repository.findAll(pageable)
+        return repository.findByUser(user, pageable)
                 .map(this::mapToDTO);
     }
 
