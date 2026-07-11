@@ -5,6 +5,7 @@ import com.example.taskmanager.dto.TaskResponseDTO;
 import com.example.taskmanager.entity.Status;
 import com.example.taskmanager.entity.Task;
 import com.example.taskmanager.entity.User;
+import com.example.taskmanager.exception.AccessDeniedException;
 import com.example.taskmanager.exception.ResourceNotFoundException;
 import com.example.taskmanager.repository.TaskRepository;
 import com.example.taskmanager.repository.UserRepository;
@@ -26,18 +27,38 @@ public class TaskService {
         this.userRepository = userRepository;
     }
 
-    public TaskResponseDTO createTask(TaskRequestDTO dto) {
+    private User getCurrentUser() {
 
-        // Get logged-in user's email from JWT
         String email = SecurityContextHolder
                 .getContext()
                 .getAuthentication()
                 .getName();
 
-        // Find user in database
-        User user = userRepository.findByEmail(email)
+        return userRepository.findByEmail(email)
                 .orElseThrow(() ->
                         new RuntimeException("User not found"));
+    }
+    private Task getTaskOwnedByCurrentUser(Long id) {
+
+        Task task = repository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Task not found with id: " + id));
+
+        User currentUser = getCurrentUser();
+        if (task.getUser() == null) {
+            throw new ResourceNotFoundException("Task has no owner.");
+        }
+        if (!task.getUser().getId().equals(currentUser.getId())) {
+            throw new AccessDeniedException("You are not allowed to access this task.");
+        }
+
+        return task;
+    }
+    public TaskResponseDTO createTask(TaskRequestDTO dto) {
+
+        // Get logged-in user's email from JWT
+        // Find user in database
+        User user = getCurrentUser();
 
         // Create task
         Task task = mapToEntity(dto);
@@ -55,13 +76,7 @@ public class TaskService {
             int page,
             int size,
             String sortBy) {
-        String email = SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getName();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new RuntimeException("User not found"));
+        User user = getCurrentUser();
         Pageable pageable = PageRequest.of(
                 page,
                 size,
@@ -73,29 +88,27 @@ public class TaskService {
     }
 
     public TaskResponseDTO getTaskById(Long id) {
-        Task task = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
+        Task task = getTaskOwnedByCurrentUser(id);
 
         return mapToDTO(task);
     }
     public TaskResponseDTO updateTask(Long id, TaskRequestDTO dto) {
-        Task existing = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
+        Task task = getTaskOwnedByCurrentUser(id);
 
-        existing.setTitle(dto.getTitle());
-        existing.setDescription(dto.getDescription());
-        existing.setCompleted(dto.isCompleted());
-        existing.setStatus(Status.valueOf(dto.getStatus()));
+        task.setTitle(dto.getTitle());
+        task.setDescription(dto.getDescription());
+        task.setCompleted(dto.isCompleted());
+        task.setStatus(Status.valueOf(dto.getStatus()));
 
-        Task updated = repository.save(existing);
+        Task updated = repository.save(task);
 
         return mapToDTO(updated);
     }
     public void deleteTask(Long id) {
-        if (!repository.existsById(id)) {
-            throw new ResourceNotFoundException("Task not found with id: " + id);
-        }
-        repository.deleteById(id);
+
+        Task task = getTaskOwnedByCurrentUser(id);
+
+        repository.delete(task);
     }
     private Task mapToEntity(TaskRequestDTO dto) {
         Task task = new Task();
