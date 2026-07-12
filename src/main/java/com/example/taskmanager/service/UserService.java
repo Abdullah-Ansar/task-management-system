@@ -4,6 +4,7 @@ import com.example.taskmanager.dto.LoginRequestDTO;
 import com.example.taskmanager.dto.LoginResponseDTO;
 import com.example.taskmanager.dto.RegisterRequestDTO;
 import com.example.taskmanager.dto.UserResponseDTO;
+import com.example.taskmanager.entity.Role;
 import com.example.taskmanager.entity.User;
 import com.example.taskmanager.repository.UserRepository;
 import com.example.taskmanager.security.JwtService;
@@ -44,6 +45,7 @@ public class UserService {
         user.setPassword(
                 passwordEncoder.encode(dto.getPassword())
         );
+        user.setRole(Role.USER);
 
         // SAVE USER
         User savedUser = repository.save(user);

@@ -3,6 +3,7 @@ package com.example.taskmanager.service;
 import com.example.taskmanager.entity.User;
 import com.example.taskmanager.repository.UserRepository;
 
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,11 @@ public class CustomUserDetailsService
                 .builder()
                 .username(user.getEmail())
                 .password(user.getPassword())
+                .authorities(
+                        new SimpleGrantedAuthority(
+                                "ROLE_" + user.getRole().name()
+                        )
+                )
                 .build();
     }
 }
