@@ -9,11 +9,16 @@ import com.example.taskmanager.entity.User;
 import com.example.taskmanager.repository.UserRepository;
 import com.example.taskmanager.security.JwtService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
@@ -56,7 +61,7 @@ public class UserService {
         response.setId(savedUser.getId());
         response.setName(savedUser.getName());
         response.setEmail(savedUser.getEmail());
-
+        response.setRole(savedUser.getRole().name());
         return response;
     }
     public LoginResponseDTO login(LoginRequestDTO dto) {
@@ -76,6 +81,11 @@ public class UserService {
         }
 
         String token = jwtService.generateToken(user.getEmail());
+
+        logger.info(
+                "User '{}' logged in successfully",
+                user.getEmail()
+        );
 
         return new LoginResponseDTO(token);
 

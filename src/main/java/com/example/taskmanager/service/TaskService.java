@@ -9,6 +9,8 @@ import com.example.taskmanager.exception.AccessDeniedException;
 import com.example.taskmanager.exception.ResourceNotFoundException;
 import com.example.taskmanager.repository.TaskRepository;
 import com.example.taskmanager.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.*;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +18,9 @@ import java.util.List;
 
 @Service
 public class TaskService {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(TaskService.class);
 
     private final TaskRepository repository;
     private final UserRepository userRepository;
@@ -68,6 +73,13 @@ public class TaskService {
 
         // Save task
         Task saved = repository.save(task);
+
+
+        logger.info(
+                "Task '{}' created by user {}",
+                saved.getTitle(),
+                user.getEmail()
+        );
 
         return mapToDTO(saved);
     }

@@ -4,17 +4,33 @@ import com.example.taskmanager.dto.TaskResponseDTO;
 import com.example.taskmanager.dto.UserResponseDTO;
 import com.example.taskmanager.entity.Task;
 import com.example.taskmanager.entity.User;
+import com.example.taskmanager.exception.ResourceNotFoundException;
 import com.example.taskmanager.repository.TaskRepository;
 import com.example.taskmanager.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
 public class AdminService {
-
+    private static final Logger logger =
+            LoggerFactory.getLogger(AdminService.class);
     private final UserRepository userRepository;
     private final TaskRepository taskRepository;
 
+    private User getCurrentUser() {
+
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        return userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+    }
     public AdminService(UserRepository userRepository,
                         TaskRepository taskRepository) {
 
@@ -63,5 +79,22 @@ public class AdminService {
         dto.setStatus(task.getStatus().name());
 
         return dto;
+    }
+    public void deleteAnyTask(Long id) {
+
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Task not found with id: " + id));
+        User admin = getCurrentUser();
+
+        logger.warn(
+                "Admin '{}' deleted task '{}' (ID={})",
+                admin.getEmail(),
+                task.getTitle(),
+                task.getId()
+        );
+
+        taskRepository.delete(task);
     }
 }
