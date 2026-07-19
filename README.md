@@ -231,29 +231,51 @@ https://task-management-system-production-cb49.up.railway.app/v3/api-docs
 
 # 📸 Screenshots
 
-### Swagger UI
+## Swagger UI
 
-> Add screenshot here
+![Swagger](screenshots/swagger-home.png)
 
-### Login API
+---
 
-> Add screenshot here
+## JWT Authorization
 
-### Register API
+![Authorize](screenshots/authorize.png)
 
-> Add screenshot here
+---
 
-### Task APIs
+## Register API
 
-> Add screenshot here
+![Register](screenshots/register.png)
 
-### Docker Containers
+---
 
-> Add screenshot here
+## Login API
 
-### Railway Deployment
+![Login](screenshots/login.png)
 
-> Add screenshot here
+---
+
+## Create Task
+
+![Create Task](screenshots/create-task.png)
+
+---
+
+## My Tasks
+
+![My Tasks](screenshots/my-tasks.png)
+
+---
+
+## Docker Containers
+
+![Docker](screenshots/docker-desktop.png)
+
+---
+
+## Railway Deployment
+
+![Railway](screenshots/railway-dashboard.png)
 
 ---
 
