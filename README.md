@@ -4,6 +4,12 @@ A production-ready RESTful Task Management API built using **Spring Boot**, foll
 
 The application enables users to securely manage their own tasks while allowing administrators to manage users through role-based authorization. The project is fully containerized with Docker and deployed on Railway using MySQL.
 
+![Java](https://img.shields.io/badge/Java-21-orange)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-green)
+![Docker](https://img.shields.io/badge/Docker-Containerized-blue)
+![Railway](https://img.shields.io/badge/Deployed-Railway-purple)
+![License](https://img.shields.io/badge/License-MIT-blue)
+
 ---
 
 # 🌐 Live Demo
