@@ -1,196 +1,292 @@
-# Task Management and Team Collaboration System
+# 🚀 Task Management & Team Collaboration API
 
-A backend REST API project built using Java, Spring Boot, Gradle, MySQL, and Spring Security.
+A production-ready RESTful Task Management API built using **Spring Boot**, following clean architecture principles and secured with **Spring Security** and **JWT Authentication**.
 
-This project provides a complete task management backend system with authentication, JWT-based authorization, pagination, validation, filtering, and clean layered architecture following industry-level backend development practices.
+The application enables users to securely manage their own tasks while allowing administrators to manage users through role-based authorization. The project is fully containerized with Docker and deployed on Railway using MySQL.
 
 ---
 
-## 🚀 Features
+# 🌐 Live Demo
 
-### 🔐 Authentication & Security
-- User Registration
-- User Login
-- JWT Token Generation
-- Password Encryption using BCrypt
-- Spring Security Integration
+## 🚀 Live Swagger UI
 
-### 📋 Task Management
+https://task-management-system-production-cb49.up.railway.app/swagger-ui/index.html
+
+## 📄 OpenAPI Documentation
+
+https://task-management-system-production-cb49.up.railway.app/v3/api-docs
+
+---
+
+# 📂 GitHub Repository
+
+https://github.com/Abdullah-Ansar/task-management-system
+
+---
+
+# ✨ Features
+
+## 🔐 Authentication & Security
+
+- JWT Authentication
+- Spring Security 6
+- BCrypt Password Encoding
+- Stateless Authentication
+- Role-Based Authorization (USER / ADMIN)
+- User-specific Resource Ownership
+- Protected REST APIs
+
+---
+
+## 📋 Task Management
+
 - Create Task
-- Get All Tasks
-- Get Task By ID
 - Update Task
 - Delete Task
-
-### ⚡ Advanced Backend Features
+- Get Task by ID
+- Get All Tasks
 - Pagination
 - Sorting
-- Search APIs
-- Filter Tasks by Status
-- Validation Handling
-- Global Exception Handling
-- DTO Architecture
-- Enum-based Status Management
+- Search Tasks
+- Task Ownership Validation
 
 ---
 
-## 🛠️ Tech Stack
+## 👨‍💼 Admin Features
 
-- Java 21
-- Spring Boot 3
-- Spring Security
-- JWT Authentication
-- Spring Data JPA
-- MySQL
-- Gradle
-- Hibernate
-- Postman
-- Git & GitHub
+- View All Users
+- Manage Users
+- Restricted ADMIN Endpoints
 
 ---
 
-## 📂 Project Structure
+## 🏗 Backend Architecture
 
-```text
-src/main/java/com/example/taskmanager
-│
-├── controller
-├── service
-├── repository
-├── entity
-├── dto
-├── exception
-├── config
-├── security
-```
-
----
-
-## 🔥 Authentication APIs
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | /api/auth/register | Register new user |
-| POST | /api/auth/login | Login user |
-
----
-
-## 📋 Task APIs
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | /api/tasks | Create task |
-| GET | /api/tasks | Get all tasks |
-| GET | /api/tasks/{id} | Get task by ID |
-| PUT | /api/tasks/{id} | Update task |
-| DELETE | /api/tasks/{id} | Delete task |
-
----
-
-## 🔍 Filtering & Search APIs
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | /api/tasks/status/{status} | Filter tasks by status |
-| GET | /api/tasks/search?keyword=spring | Search tasks by title |
-
----
-
-## 📄 Pagination & Sorting Example
-
-```http
-GET /api/tasks?page=0&size=5&sortBy=title
-```
-
----
-
-## 🔐 JWT Login Example
-
-### Request
-
-```json
-{
-  "email": "abdullah@gmail.com",
-  "password": "123456"
-}
-```
-
-### Response
-
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiJ9..."
-}
-```
-
----
-
-## 📌 Status Enum
-
-```java
-TODO
-IN_PROGRESS
-DONE
-```
-
----
-
-## 🧠 Concepts Implemented
-
-- REST APIs
 - Layered Architecture
 - DTO Pattern
-- Validation
-- Exception Handling
-- Pagination & Sorting
-- Search & Filtering
-- Spring Security
-- JWT Authentication
-- Password Encryption
-- ResponseEntity
-- Enum Usage
+- Repository Pattern
+- Bean Validation
+- Global Exception Handling
+- RESTful API Design
+- Standardized API Responses
 
 ---
 
-## ▶️ Run Project
+## 🗄 Database
 
-### Clone Repository
+- MySQL
+- Spring Data JPA
+- Hibernate ORM
+- One-to-Many Relationships
+- Many-to-One Relationships
+
+---
+
+## 🐳 DevOps & Deployment
+
+- Docker
+- Docker Compose
+- Railway Cloud Deployment
+- Environment Variables
+- Production-ready Dockerfile
+
+---
+
+# 🛠 Tech Stack
+
+| Category | Technologies |
+|----------|--------------|
+| Language | Java 21 |
+| Framework | Spring Boot 3 |
+| Security | Spring Security, JWT, BCrypt |
+| Database | MySQL |
+| ORM | Hibernate, Spring Data JPA |
+| Build Tool | Gradle |
+| API Documentation | Swagger / OpenAPI |
+| DevOps | Docker, Docker Compose |
+| Cloud | Railway |
+| Tools | Git, GitHub, Postman, IntelliJ IDEA |
+
+---
+
+# 📁 Project Structure
+
+```text
+src
+├── config
+├── controller
+├── dto
+├── entity
+├── exception
+├── filter
+├── repository
+├── security
+├── service
+└── util
+```
+
+---
+
+# 🔐 Authentication Flow
+
+1. Register a new account
+2. Login using email and password
+3. Receive JWT Access Token
+4. Click **Authorize** in Swagger
+5. Enter
+
+```
+Bearer <your_token>
+```
+
+6. Access secured endpoints
+
+---
+
+# 🚀 Getting Started
+
+## Clone Repository
 
 ```bash
 git clone https://github.com/Abdullah-Ansar/task-management-system.git
+
+cd task-management-system
 ```
 
 ---
 
-### Configure Database
+## Configure Database
 
-Create MySQL database:
-
-```sql
-CREATE DATABASE task_manager;
-```
-
-Update `application.properties`:
+Update your datasource configuration.
 
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/task_manager
-spring.datasource.username=root
+spring.datasource.url=YOUR_DATABASE_URL
+spring.datasource.username=YOUR_USERNAME
 spring.datasource.password=YOUR_PASSWORD
 ```
 
 ---
 
-### Start Application
+## Run Application
 
 ```bash
 ./gradlew bootRun
 ```
 
+or
+
+```bash
+gradlew bootRun
+```
+
+Swagger
+
+```
+http://localhost:8080/swagger-ui/index.html
+```
+
 ---
 
-## 👨‍💻 Author
+# 🐳 Docker
 
-Abdullah Ansari
+Build Image
 
-GitHub:
+```bash
+docker build -t task-management-system .
+```
+
+Run Container
+
+```bash
+docker run -p 8080:8080 task-management-system
+```
+
+---
+
+## Docker Compose
+
+```bash
+docker compose up --build
+```
+
+---
+
+# 📚 API Documentation
+
+### Swagger UI
+
+https://task-management-system-production-cb49.up.railway.app/swagger-ui/index.html
+
+### OpenAPI Docs
+
+https://task-management-system-production-cb49.up.railway.app/v3/api-docs
+
+---
+
+# 📸 Screenshots
+
+### Swagger UI
+
+> Add screenshot here
+
+### Login API
+
+> Add screenshot here
+
+### Register API
+
+> Add screenshot here
+
+### Task APIs
+
+> Add screenshot here
+
+### Docker Containers
+
+> Add screenshot here
+
+### Railway Deployment
+
+> Add screenshot here
+
+---
+
+# 🚀 Future Enhancements
+
+- Refresh Tokens
+- Email Verification
+- Password Reset
+- Team Collaboration
+- File Attachments
+- Notifications
+- Activity Logs
+- Unit Testing
+- Integration Testing
+- CI/CD Pipeline
+- Kubernetes
+- AWS Deployment
+- Microservices Architecture
+
+---
+
+# 👨‍💻 Author
+
+**Abdullah Ansari**
+
+📍 Gonda, Uttar Pradesh, India
+
+**LinkedIn**
+
+https://linkedin.com/in/abdullah-ansari-749a72178
+
+**GitHub**
+
 https://github.com/Abdullah-Ansar
+
+**Email**
+
+abdullah.ab68@gmail.com
+
+---
+
+## ⭐ If you like this project, please consider giving it a Star!
