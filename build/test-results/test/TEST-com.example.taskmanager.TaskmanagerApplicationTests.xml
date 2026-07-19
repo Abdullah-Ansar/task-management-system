@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.taskmanager.TaskmanagerApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-04-29T10:51:10.309Z" hostname="ABDULLAH-PC" time="0.597">
+<testsuite name="com.example.taskmanager.TaskmanagerApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-07-18T11:42:32.066Z" hostname="ABDULLAH-PC" time="0.523">
   <properties/>
-  <testcase name="contextLoads()" classname="com.example.taskmanager.TaskmanagerApplicationTests" time="0.597"/>
-  <system-out><![CDATA[16:21:05.370 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.example.taskmanager.TaskmanagerApplicationTests]: TaskmanagerApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-16:21:05.485 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.example.taskmanager.TaskmanagerApplication for test class com.example.taskmanager.TaskmanagerApplicationTests
+  <testcase name="contextLoads()" classname="com.example.taskmanager.TaskmanagerApplicationTests" time="0.523"/>
+  <system-out><![CDATA[17:12:24.911 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.example.taskmanager.TaskmanagerApplicationTests]: TaskmanagerApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+17:12:25.069 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.example.taskmanager.TaskmanagerApplication for test class com.example.taskmanager.TaskmanagerApplicationTests
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -12,20 +12,20 @@
   '  |____| .__|_| |_|_| |_\__, | / / / /
  =========|_|==============|___/=/_/_/_/
 
- :: Spring Boot ::      (v3.5.15-SNAPSHOT)
+ :: Spring Boot ::               (v3.5.14)
 
-2026-04-29T16:21:06.029+05:30  INFO 17192 --- [taskmanager] [    Test worker] c.e.t.TaskmanagerApplicationTests        : Starting TaskmanagerApplicationTests using Java 21.0.10 with PID 17192 (started by abdul in E:\JavaBackend\Task Manage and User Collab\taskmanager)
-2026-04-29T16:21:06.031+05:30  INFO 17192 --- [taskmanager] [    Test worker] c.e.t.TaskmanagerApplicationTests        : No active profile set, falling back to 1 default profile: "default"
-2026-04-29T16:21:06.852+05:30  INFO 17192 --- [taskmanager] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-04-29T16:21:06.919+05:30  INFO 17192 --- [taskmanager] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 53 ms. Found 1 JPA repository interface.
-2026-04-29T16:21:07.424+05:30  INFO 17192 --- [taskmanager] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-04-29T16:21:07.483+05:30  INFO 17192 --- [taskmanager] [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.49.Final
-2026-04-29T16:21:07.518+05:30  INFO 17192 --- [taskmanager] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2026-04-29T16:21:07.888+05:30  INFO 17192 --- [taskmanager] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-04-29T16:21:07.928+05:30  INFO 17192 --- [taskmanager] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-04-29T16:21:08.452+05:30  INFO 17192 --- [taskmanager] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@690ed13a
-2026-04-29T16:21:08.456+05:30  INFO 17192 --- [taskmanager] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-04-29T16:21:08.568+05:30  INFO 17192 --- [taskmanager] [    Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+2026-07-18T17:12:25.640+05:30  INFO 14448 --- [taskmanager] [    Test worker] c.e.t.TaskmanagerApplicationTests        : Starting TaskmanagerApplicationTests using Java 21.0.10 with PID 14448 (started by Abdullah in E:\JavaBackend\Task Manage and User Collab\taskmanager)
+2026-07-18T17:12:25.643+05:30  INFO 14448 --- [taskmanager] [    Test worker] c.e.t.TaskmanagerApplicationTests        : No active profile set, falling back to 1 default profile: "default"
+2026-07-18T17:12:27.003+05:30  INFO 14448 --- [taskmanager] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-18T17:12:27.099+05:30  INFO 14448 --- [taskmanager] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 81 ms. Found 2 JPA repository interfaces.
+2026-07-18T17:12:27.929+05:30  INFO 14448 --- [taskmanager] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-07-18T17:12:28.034+05:30  INFO 14448 --- [taskmanager] [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.49.Final
+2026-07-18T17:12:28.104+05:30  INFO 14448 --- [taskmanager] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-07-18T17:12:28.560+05:30  INFO 14448 --- [taskmanager] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-18T17:12:28.601+05:30  INFO 14448 --- [taskmanager] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-07-18T17:12:29.046+05:30  INFO 14448 --- [taskmanager] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@745cf754
+2026-07-18T17:12:29.049+05:30  INFO 14448 --- [taskmanager] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-07-18T17:12:29.159+05:30  INFO 14448 --- [taskmanager] [    Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
 	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
 	Database driver: undefined/unknown
 	Database version: 8.0.46
@@ -33,10 +33,11 @@
 	Isolation level: undefined/unknown
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2026-04-29T16:21:09.382+05:30  INFO 17192 --- [taskmanager] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-04-29T16:21:09.453+05:30  INFO 17192 --- [taskmanager] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-04-29T16:21:09.821+05:30  WARN 17192 --- [taskmanager] [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-04-29T16:21:10.279+05:30  INFO 17192 --- [taskmanager] [    Test worker] c.e.t.TaskmanagerApplicationTests        : Started TaskmanagerApplicationTests in 4.565 seconds (process running for 6.062)
+2026-07-18T17:12:30.222+05:30  INFO 14448 --- [taskmanager] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-18T17:12:30.293+05:30  INFO 14448 --- [taskmanager] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-18T17:12:30.992+05:30  WARN 14448 --- [taskmanager] [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-18T17:12:31.036+05:30  INFO 14448 --- [taskmanager] [    Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-07-18T17:12:32.052+05:30  INFO 14448 --- [taskmanager] [    Test worker] c.e.t.TaskmanagerApplicationTests        : Started TaskmanagerApplicationTests in 6.761 seconds (process running for 8.423)
 ]]></system-out>
   <system-err><![CDATA[Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
 WARNING: A Java agent has been loaded dynamically (C:\Users\abdul\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.17.8\f09415827a71be7ed621c7bd02550678f28bc81c\byte-buddy-agent-1.17.8.jar)

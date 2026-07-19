@@ -1,0 +1,22 @@
+# IDE
+.idea
+*.iml
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Gradle cache
+.gradle
+
+# Build output (generated inside Docker)
+build/
+
+# Documentation
+README.md
+HELP.md
+
+# OS files
+.DS_Store
+Thumbs.db
