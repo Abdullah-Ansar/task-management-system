@@ -45,6 +45,7 @@ class UserServiceTest {
         user.setEmail("abdullah@gmail.com");
         user.setPassword("encodedPassword");
         user.setRole(Role.USER);
+        user.setEmailVerified(true);
 
         when(repository.findByEmail(request.getEmail()))
                 .thenReturn(Optional.of(user));
@@ -52,8 +53,10 @@ class UserServiceTest {
                 request.getPassword(),
                 user.getPassword()))
                 .thenReturn(true);
-        when(jwtService.generateToken(user.getEmail()))
-                .thenReturn("fake-jwt-token");
+        when(jwtService.generateToken(
+                user.getEmail(),
+                user.getTokenVersion()
+        )).thenReturn("fake-jwt-token");
 
         LoginResponseDTO response = userService.login(request);
 
@@ -77,7 +80,7 @@ class UserServiceTest {
         );
 
         assertEquals(
-                "Invalid email or password",
+                "Invalid email or password.",
                 exception.getMessage()
         );
     }

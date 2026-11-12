@@ -112,7 +112,7 @@ public class UserService {
     }
 
 
-    @Transactional
+    @Transactional(noRollbackFor = InvalidOtpException.class)
     public ResetPasswordResponseDTO verifyResetOtp(
             String email, String enteredOtp) {
 
@@ -292,16 +292,19 @@ public class UserService {
     }
 
 
+
     public String forgotPassword(String email) {
+
+        final String genericMessage =
+                "If the account exists, a password reset OTP will be sent.";
 
         email = email.trim().toLowerCase();
 
-        User user = repository.findByEmail(email)
-                .orElseThrow(() ->
-                        new RuntimeException("If the account exists, a reset OTP will be sent."));
+        // Return the same response if the account does not exist.
+        User user = repository.findByEmail(email).orElse(null);
 
-        if (!user.isEmailVerified()) {
-            throw new RuntimeException("Please verify your email first.");
+        if (user == null || !user.isEmailVerified()) {
+            return genericMessage;
         }
 
         LocalDateTime now = LocalDateTime.now();
@@ -310,17 +313,16 @@ public class UserService {
                 passwordResetTokenRepository.findByEmail(email)
                         .orElseGet(PasswordResetToken::new);
 
-        // Enforce 60-second resend cooldown
-        if (resetToken.getId() != null) {
+        // Enforce 60-second resend cooldown without revealing account status.
+        if (resetToken.getId() != null
+                && resetToken.getLastSentAt() != null) {
 
             long secondsSinceLastSent =
-                    Duration.between(resetToken.getLastSentAt(), now).getSeconds();
+                    Duration.between(resetToken.getLastSentAt(), now)
+                            .getSeconds();
 
             if (secondsSinceLastSent < 60) {
-                throw new RateLimitException(
-                        "Please wait " + (60 - secondsSinceLastSent)
-                                + " seconds before requesting another reset OTP."
-                );
+                return genericMessage;
             }
         }
 
@@ -342,8 +344,9 @@ public class UserService {
                         + "\n\nThis OTP expires in 10 minutes."
         );
 
-        return "If the account exists, a password reset OTP will be sent.";
+        return genericMessage;
     }
+
 
     @Transactional(noRollbackFor = InvalidOtpException.class)
     public String verifyEmail(String email, String enteredOtp) {

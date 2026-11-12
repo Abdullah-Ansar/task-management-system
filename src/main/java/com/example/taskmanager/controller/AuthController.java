@@ -5,6 +5,7 @@ import com.example.taskmanager.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.taskmanager.dto.ResetPasswordDTO;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -18,7 +19,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(
-            @RequestBody RegisterRequestDTO dto) {
+            @Valid @RequestBody RegisterRequestDTO dto) {
 
         return ResponseEntity.ok(
                 service.register(dto)
@@ -26,7 +27,7 @@ public class AuthController {
     }
     @PostMapping("/resend-otp")
     public ResponseEntity<String> resendOtp(
-            @RequestBody ResendOtpRequestDTO dto) {
+            @Valid @RequestBody ResendOtpRequestDTO dto) {
 
         return ResponseEntity.ok(
                 service.resendOtp(dto.getEmail())
@@ -35,7 +36,7 @@ public class AuthController {
 
     @PostMapping("/verify-email")
     public ResponseEntity<String> verifyEmail(
-            @RequestBody VerifyOtpRequestDTO dto) {
+            @Valid @RequestBody VerifyOtpRequestDTO dto) {
 
         return ResponseEntity.ok(
                 service.verifyEmail(dto.getEmail(), dto.getOtp())
@@ -44,7 +45,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(
-            @RequestBody LoginRequestDTO dto) {
+            @Valid @RequestBody LoginRequestDTO dto) {
 
         return ResponseEntity.ok(
                 service.login(dto)
@@ -52,7 +53,7 @@ public class AuthController {
     }
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(
-            @RequestBody ForgotPasswordRequestDTO dto) {
+            @Valid @RequestBody ForgotPasswordRequestDTO dto) {
 
         return ResponseEntity.ok(
                 service.forgotPassword(dto.getEmail())
@@ -60,7 +61,7 @@ public class AuthController {
     }
     @PostMapping("/verify-reset-otp")
     public ResponseEntity<ResetPasswordResponseDTO> verifyResetOtp(
-            @RequestBody VerifyResetOtpDTO dto) {
+            @Valid @RequestBody VerifyResetOtpDTO dto) {
 
         return ResponseEntity.ok(
                 service.verifyResetOtp(dto.getEmail(), dto.getOtp())
@@ -68,7 +69,7 @@ public class AuthController {
     }
     @PostMapping("/reset-password")
     public ResponseEntity<String> resetPassword(
-            @RequestBody ResetPasswordDTO dto) {
+            @Valid @RequestBody ResetPasswordDTO dto) {
 
         return ResponseEntity.ok(
                 service.resetPassword(dto)
