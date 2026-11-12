@@ -1,22 +1,27 @@
+
 package com.example.taskmanager.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
 @Service
 public class JwtService {
 
-    private final String SECRET =
-            "myverysecuresecretkeymyverysecuresecretkey12345";
+    private final Key key;
 
-    private final Key key =
-            Keys.hmacShaKeyFor(SECRET.getBytes());
+    public JwtService(@Value("${jwt.secret}") String secret) {
+        this.key = Keys.hmacShaKeyFor(
+                secret.getBytes(StandardCharsets.UTF_8)
+        );
+    }
 
     public String generateToken(String email, int tokenVersion) {
 
@@ -30,6 +35,7 @@ public class JwtService {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
+
     public boolean validateToken(String token, String email) {
 
         String extractedEmail = extractEmail(token);
@@ -37,6 +43,7 @@ public class JwtService {
         return extractedEmail.equals(email)
                 && !isTokenExpired(token);
     }
+
     public String extractEmail(String token) {
 
         return Jwts.parserBuilder()
@@ -46,6 +53,7 @@ public class JwtService {
                 .getBody()
                 .getSubject();
     }
+
     public int extractTokenVersion(String token) {
 
         return Jwts.parserBuilder()

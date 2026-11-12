@@ -221,6 +221,9 @@ public class UserService {
                 passwordEncoder.encode(dto.getNewPassword())
         );
 
+        // Invalidate all previously issued JWT tokens
+        user.setTokenVersion(user.getTokenVersion() + 1);
+
         // Reset account lockout
         user.setFailedLoginAttempts(0);
         user.setLockTime(null);
