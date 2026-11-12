@@ -6,6 +6,7 @@ import com.example.taskmanager.repository.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Service
 public class CustomUserDetailsService
