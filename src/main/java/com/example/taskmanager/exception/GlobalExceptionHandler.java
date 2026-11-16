@@ -13,6 +13,7 @@ import java.util.Map;
 import com.example.taskmanager.exception.RateLimitException;
 import com.example.taskmanager.exception.InvalidOtpException;
 import com.example.taskmanager.exception.AccountLockedException;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -49,6 +50,23 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.LOCKED)
                 .body(error);
     }
+
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<Map<String, String>> handleResponseStatus(
+            ResponseStatusException ex) {
+
+        HttpStatus status = HttpStatus.valueOf(
+                ex.getStatusCode().value()
+        );
+
+        Map<String, String> error = new HashMap<>();
+        error.put("message", ex.getReason());
+        error.put("status", String.valueOf(status.value()));
+
+        return ResponseEntity.status(status).body(error);
+    }
+
 
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<Map<String, String>> handleInvalidCredentials(

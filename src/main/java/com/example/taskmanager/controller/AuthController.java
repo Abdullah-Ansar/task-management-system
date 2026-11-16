@@ -6,6 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.taskmanager.dto.ResetPasswordDTO;
 import jakarta.validation.Valid;
+import com.example.taskmanager.ratelimit.LoginRateLimiter;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -13,8 +17,11 @@ public class AuthController {
 
     private final UserService service;
 
-    public AuthController(UserService service) {
+    private final LoginRateLimiter loginRateLimiter;
+
+    public AuthController(UserService service,LoginRateLimiter loginRateLimiter) {
         this.service = service;
+        this.loginRateLimiter = loginRateLimiter;
     }
 
     @PostMapping("/register")
@@ -43,14 +50,26 @@ public class AuthController {
         );
     }
 
+
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(
-            @Valid @RequestBody LoginRequestDTO dto) {
+            @Valid @RequestBody LoginRequestDTO dto,
+            HttpServletRequest request) {
+
+        String ipAddress = request.getRemoteAddr();
+
+        if (!loginRateLimiter.isAllowed(ipAddress)) {
+            throw new ResponseStatusException(
+                    HttpStatus.TOO_MANY_REQUESTS,
+                    "Too many login requests. Please try again later."
+            );
+        }
 
         return ResponseEntity.ok(
                 service.login(dto)
         );
     }
+
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(
             @Valid @RequestBody ForgotPasswordRequestDTO dto) {
