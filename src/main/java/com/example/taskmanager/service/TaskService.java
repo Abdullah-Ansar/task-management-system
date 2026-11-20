@@ -88,7 +88,34 @@ public class TaskService {
             int page,
             int size,
             String sortBy) {
+
+        if (page < 0) {
+            throw new IllegalArgumentException(
+                    "Page number cannot be negative."
+            );
+        }
+
+        if (size < 1 || size > 100) {
+            throw new IllegalArgumentException(
+                    "Page size must be between 1 and 100."
+            );
+        }
+
+        List<String> allowedSortFields = List.of(
+                "id",
+                "title",
+                "completed",
+                "status"
+        );
+
+        if (!allowedSortFields.contains(sortBy)) {
+            throw new IllegalArgumentException(
+                    "Invalid sorting field: " + sortBy
+            );
+        }
+
         User user = getCurrentUser();
+
         Pageable pageable = PageRequest.of(
                 page,
                 size,
@@ -110,7 +137,7 @@ public class TaskService {
         task.setTitle(dto.getTitle());
         task.setDescription(dto.getDescription());
         task.setCompleted(dto.isCompleted());
-        task.setStatus(Status.valueOf(dto.getStatus()));
+        task.setStatus(parseStatus(dto.getStatus()));
 
         Task updated = repository.save(task);
 
@@ -127,7 +154,7 @@ public class TaskService {
         task.setTitle(dto.getTitle());
         task.setDescription(dto.getDescription());
         task.setCompleted(dto.isCompleted());
-        task.setStatus(Status.valueOf(dto.getStatus())); // IMPORTANT
+        task.setStatus(parseStatus(dto.getStatus())); // IMPORTANT
 
         return task;
     }
@@ -143,19 +170,39 @@ public class TaskService {
     }
     public List<TaskResponseDTO> getTasksByStatus(String status) {
 
-        Status taskStatus = Status.valueOf(status);
+        User user = getCurrentUser();
 
-        return repository.findByStatus(taskStatus)
+        Status taskStatus = parseStatus(status);
+
+        return repository.findByUserAndStatus(user, taskStatus)
                 .stream()
                 .map(this::mapToDTO)
                 .toList();
     }
     public List<TaskResponseDTO> searchTasks(String keyword) {
 
+        User user = getCurrentUser();
+
         return repository
-                .findByTitleContainingIgnoreCase(keyword)
+                .findByUserAndTitleContainingIgnoreCase(user, keyword)
                 .stream()
                 .map(this::mapToDTO)
                 .toList();
+    }
+    private Status parseStatus(String status) {
+
+        if (status == null || status.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Task status is required."
+            );
+        }
+
+        try {
+            return Status.valueOf(status.trim().toUpperCase());
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalArgumentException(
+                    "Invalid task status. Allowed values: TODO, IN_PROGRESS, DONE."
+            );
+        }
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import com.example.taskmanager.exception.InvalidCredentialsException;
 
 import java.util.HashMap;
@@ -126,10 +127,39 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleAccessDenied(
             AccessDeniedException ex) {
         logger.warn("Access denied: {}", ex.getMessage());
-        logger.warn("Validation failed");
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
                 .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalArgument(
+            IllegalArgumentException ex) {
+
+        logger.warn("Invalid request parameter: {}", ex.getMessage());
+
+        Map<String, String> error = new HashMap<>();
+        error.put("message", ex.getMessage());
+        error.put("status", "400");
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(error);
+    }
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Map<String, String>> handleTypeMismatch(
+            MethodArgumentTypeMismatchException ex) {
+
+        logger.warn("Invalid request parameter: {}", ex.getName());
+
+        Map<String, String> error = new HashMap<>();
+        error.put("message",
+                "Invalid value for parameter: " + ex.getName());
+        error.put("status", "400");
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(error);
     }
 
     @ExceptionHandler(Exception.class)

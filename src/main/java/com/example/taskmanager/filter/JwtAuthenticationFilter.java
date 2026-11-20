@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import io.jsonwebtoken.JwtException;
 
 import com.example.taskmanager.entity.User;
 import com.example.taskmanager.repository.UserRepository;
@@ -42,75 +43,75 @@ public class JwtAuthenticationFilter
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain)
-
             throws ServletException, IOException {
+
         String requestPath = request.getServletPath();
 
         if (requestPath.startsWith("/api/auth")) {
             filterChain.doFilter(request, response);
             return;
         }
-        String authHeader =
-                request.getHeader("Authorization");
 
-        if (authHeader == null
-                || !authHeader.startsWith("Bearer ")) {
+        String authHeader = request.getHeader("Authorization");
 
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
         String token = authHeader.substring(7);
+        String email;
 
-        String email = null;
-
+        // Catch only invalid JWT parsing errors
         try {
             email = jwtService.extractEmail(token);
-        } catch (Exception e) {
+        } catch (JwtException | IllegalArgumentException e) {
             filterChain.doFilter(request, response);
             return;
         }
 
         if (email != null
-                && SecurityContextHolder.getContext()
-                .getAuthentication() == null) {
+                && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            try {
-                User user = userRepository.findByEmail(email)
-                        .orElse(null);
+            // Database errors are not swallowed as JWT errors
+            User user = userRepository.findByEmail(email)
+                    .orElse(null);
 
-                if (user != null && jwtService.validateToken(token, email)) {
+            if (user != null && user.isEmailVerified()) {
 
-                    int tokenVersion =
-                            jwtService.extractTokenVersion(token);
+                boolean validToken;
+                int tokenVersion;
 
-                    // Accept token only if versions match
-                    if (tokenVersion == user.getTokenVersion()) {
-
-                        UserDetails userDetails =
-                                userDetailsService.loadUserByUsername(email);
-
-                        UsernamePasswordAuthenticationToken authToken =
-                                new UsernamePasswordAuthenticationToken(
-                                        userDetails,
-                                        null,
-                                        userDetails.getAuthorities()
-                                );
-
-                        authToken.setDetails(
-                                new WebAuthenticationDetailsSource()
-                                        .buildDetails(request)
-                        );
-
-                        SecurityContextHolder
-                                .getContext()
-                                .setAuthentication(authToken);
-                    }
+                // Catch only JWT-related errors
+                try {
+                    validToken = jwtService.validateToken(token, email);
+                    tokenVersion = jwtService.extractTokenVersion(token);
+                } catch (JwtException | IllegalArgumentException e) {
+                    SecurityContextHolder.clearContext();
+                    filterChain.doFilter(request, response);
+                    return;
                 }
 
-            } catch (Exception e) {
-                // Invalid, expired or outdated JWT: reject authentication
-                SecurityContextHolder.clearContext();
+                if (validToken && tokenVersion == user.getTokenVersion()) {
+
+                    UserDetails userDetails =
+                            userDetailsService.loadUserByUsername(email);
+
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails,
+                                    null,
+                                    userDetails.getAuthorities()
+                            );
+
+                    authToken.setDetails(
+                            new WebAuthenticationDetailsSource()
+                                    .buildDetails(request)
+                    );
+
+                    SecurityContextHolder.getContext()
+                            .setAuthentication(authToken);
+                }
             }
         }
 

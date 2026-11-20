@@ -5,9 +5,10 @@ import jakarta.validation.constraints.*;
 public class TaskRequestDTO {
 
     @NotBlank(message = "Title is required")
+    @Size(max = 150, message = "Title cannot exceed 150 characters")
     private String title;
 
-    @Size(max = 1000)
+    @Size(max = 1000, message = "Description cannot exceed 1000 characters")
     private String description;
 
     private boolean completed;

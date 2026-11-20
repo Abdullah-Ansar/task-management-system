@@ -42,17 +42,20 @@ public class TaskController {
     }
     @GetMapping("/{id}")
     public ResponseEntity<TaskResponseDTO> getTaskById(@PathVariable Long id) {
+        validateTaskId(id);
         return ResponseEntity.ok(service.getTaskById(id));
     }
     @PutMapping("/{id}")
     public ResponseEntity<TaskResponseDTO> updateTask(
             @PathVariable Long id,
             @Valid @RequestBody TaskRequestDTO dto) {
+        validateTaskId(id);
 
         return ResponseEntity.ok(service.updateTask(id, dto));
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        validateTaskId(id);
         service.deleteTask(id);
         return ResponseEntity.noContent().build();
     }
@@ -68,8 +71,21 @@ public class TaskController {
     public ResponseEntity<List<TaskResponseDTO>> searchTasks(
             @RequestParam String keyword) {
 
+        if (keyword == null || keyword.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Search keyword cannot be empty."
+            );
+        }
+
         return ResponseEntity.ok(
-                service.searchTasks(keyword)
+                service.searchTasks(keyword.trim())
         );
+    }
+    private void validateTaskId(Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException(
+                    "Task ID must be a positive number."
+            );
+        }
     }
 }
