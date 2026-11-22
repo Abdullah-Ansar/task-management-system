@@ -124,12 +124,18 @@ public class GlobalExceptionHandler {
         return errors;
     }
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<String> handleAccessDenied(
+    public ResponseEntity<Map<String, String>> handleAccessDenied(
             AccessDeniedException ex) {
-        logger.warn("Access denied: {}", ex.getMessage());
+
+        logger.warn("Access denied");
+
+        Map<String, String> error = new HashMap<>();
+        error.put("message", "You do not have permission to access this resource.");
+        error.put("status", "403");
+
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
-                .body(ex.getMessage());
+                .body(error);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
