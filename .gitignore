@@ -2,3 +2,6 @@
 build/
 .idea/
 out/
+docker-compose.yml
+.env.example
+.gitignore
